@@ -29,7 +29,7 @@ const products: Product[] = [
     name: "Conditioning Hair Mask",
     price: 36,
     image: "/1.1.png",
-    images: ["/1.1.png", "/public/23.png", "/IMG_7099.jpg"],
+    images: ["/1.1.png", "/23.png", "/IMG_7099.jpg"],
     description: "Hair Mask For Damaged Hair-Concentrate – Suitable for Dry, Damaged Bleached hair. Indulge in luxurious Hydration with our Mask for Damaged Hair – Concentrate. This rich, creamy formula combines Keratin, Amino Acids, and Botanical Extracts to nourish, strengthen, and detangle dry hair. Perfect for restoring Softness, Reducing Frizz, and adding Volume.",
     category: "mask",
     sku: "HR-MSK-FOR-DMG",
