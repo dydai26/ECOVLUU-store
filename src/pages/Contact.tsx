@@ -75,40 +75,40 @@ const Contact = () => {
 
   const faqItems = [
     {
-      question: "What Services Do You Offer as a Nutritionist?",
-      answer: "We offer a comprehensive range of services including personalized hair care consultations, custom product recommendations, hair health assessments, and specialized treatments for various hair concerns such as damaged hair, hair loss, and scalp issues."
+      question: " Are Ecovluu products suitable for all hair types?",
+      answer: "Yes! Our formulas are crafted to support a wide range of hair types—from fine and straight to coily, dry, or color-treated. Each product balances scalp care with deep nourishment, without weighing the hair down."
     },
     {
-      question: "How Often Should I See a Nutritionist?",
-      answer: "For optimal hair health, we recommend scheduling a consultation every 3-4 months. However, if you're addressing specific concerns or undergoing treatments, more frequent visits may be beneficial. We'll create a personalized schedule based on your individual needs."
+      question: " Do your products contain sulfates, silicones, or parabens?",
+      answer: "No SLS, no SLSA, no silicones, no parabens. The Hair Mask – Concentrate is 100% sulfate-free, making it ideal for dry, damaged, or sensitive hair."
     },
     {
-      question: "How Can I Prepare for a Nutritionist Consultation?",
-      answer: "To make the most of your consultation, we suggest coming with a list of current hair products you use, any medications you're taking, details about your hair care routine, and specific concerns you'd like to address. Photos of your hair over time can also be helpful."
+      question: " Are your products vegan and cruelty-free?",
+      answer: "Yes, Ecovluu is cruelty-free—we do not test on animals at any stage. The Deep Hydrating Shampoo is vegan. The Hair Mask contains hydrolyzed keratin, which is traditionally animal-derived."
     },
     {
-      question: "What Types of Clients Do You Work with?",
-      answer: "We work with clients of all ages and hair types, from those seeking preventative care to individuals with specific hair concerns. Our expertise covers a wide range of issues including hair loss, dandruff, excessive oiliness, dryness, and damage from heat or chemical treatments."
+      question: " Can I use Ecovluu products on color-treated hair?",
+      answer: "Absolutely. Our formulas are color-safe and designed to maintain hydration and fiber integrity, helping prolong the vibrancy of your hair color."
     },
     {
-      question: "What Qualifications Do You Have?",
-      answer: "Our team consists of certified trichologists and hair care specialists with extensive training in hair and scalp health. All our consultants have completed specialized education in hair nutrition, scalp conditions, and holistic hair care approaches."
+      question: " What makes Ecovluu different from other clean hair care brands?",
+      answer: "Ecovluu bridges the gap between clean beauty and professional performance. We combine high-performance botanical actives, amino acids, and modern green science with a commitment to transparency and ingredient purity."
     },
     {
-      question: "How Can I Get Started with Your Services?",
-      answer: "Getting started is easy! You can book a consultation through our website, call our office directly, or fill out the contact form on this page. We'll reach out to schedule your initial assessment and discuss the best approach for your hair care needs."
+      question: " How often should I use the Hair Mask – Concentrate?",
+      answer: "Use it 1 time per week to deeply nourish and repair. For stressed or chemically treated hair, increase as needed. Leave on for at least 10 minutes to allow full absorption."
     },
     {
-      question: "Do You Offer Virtual Consultations?",
-      answer: "Yes, we offer both in-person and virtual consultations to accommodate your schedule and location. Our virtual sessions are comprehensive and include detailed follow-up recommendations tailored to your specific needs."
+      question: " Are your products safe for sensitive scalps?",
+      answer: "Yes. Our formulations are gentle, pH-balanced, and free from harsh or irritating ingredients. If you have specific sensitivities, we recommend a patch test before full use."
     },
     {
-      question: "What Makes Your Approach Different?",
-      answer: "We take a holistic approach to hair care, considering not just your hair type but also your lifestyle, diet, stress levels, and environmental factors. Our recommendations are personalized and focus on sustainable, long-term hair health rather than quick fixes."
+      question: " Where are Ecovluu products made?",
+      answer: "All Ecovluu products are handmade in the European Union, in small batches, with care and precision. This artisanal approach ensures freshness, quality control, and a personal touch in every bottle."
     },
     {
-      question: "Are Your Products Eco-Friendly and Cruelty-Free?",
-      answer: "Absolutely! All the products we recommend and sell are eco-friendly, cruelty-free, and formulated with natural ingredients. We're committed to sustainability and ethical practices in all aspects of our business."
+      question: " Do you offer samples or travel sizes?",
+      answer: "Not yet—but we’re working on it! Join our newsletter to be the first to hear about sample kits, travel editions, and new releases."
     }
   ];
 
@@ -127,7 +127,7 @@ const Contact = () => {
                 <Phone className="h-6 w-6 text-brand-brown" />
               </div>
               <h3 className="text-lg font-bold mb-2">Call Us</h3>
-              <p className="text-gray-700">+353 89 211 8018</p>
+              <p className="text-gray-700"></p>
               <p className="text-gray-500">Mon-Fri, 9am-5pm</p>
             </div>
             
@@ -136,7 +136,7 @@ const Contact = () => {
                 <Mail className="h-6 w-6 text-brand-brown" />
               </div>
               <h3 className="text-lg font-bold mb-2">Email Us</h3>
-              <p className="text-gray-700">dydai26@gmail.com</p>
+              <p className="text-gray-700">ecovluu@gmail.com</p>
               <p className="text-gray-500">We'll respond within 24 hours</p>
             </div>
             </div>
