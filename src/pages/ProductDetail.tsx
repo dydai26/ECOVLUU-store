@@ -181,8 +181,8 @@ const ProductDetail = () => {
             <h1 className="text-2xl font-bold text-brand-brown mb-2">{product.name}</h1>
             
             <div className="flex items-center gap-2 mb-4">
-              <span className="text-gray-400 line-through">€{(product.price * 1.2).toFixed(2)}</span>
-              <span className="text-2xl font-bold text-brand-orange">€{product.price.toFixed(2)}</span>
+            
+            <span className="text-2xl font-bold text-brand-orange">€{product.price.toFixed(2)}</span>
             </div>
             
             <div className="mb-6">

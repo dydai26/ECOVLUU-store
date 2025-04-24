@@ -8,15 +8,15 @@ const products: Product[] = [
     price: 28.50,
     image: "/2.2.png",
     images: ["/2.2.png", "/IMG_7130.jpg", "/24.png"],
-    description: "Deep Hydrating Shampoo – Revitalize your hair with our sulfate-free Deep Hydrating Shampoo, specially formulated to cleanse while maintaining moisture balance. Enriched with Aloe Vera, Keratin, and Botanical Extracts, this shampoo hydrates, softens and enhances volume for healthier, shinier hair. Ideal for Dry, Damaged, or Colour-Treated Hair.",
+    description: "Deep Hydrating Shampoo – Revitalize your hair with our SLS & SLSA-free Deep Hydrating Shampoo, carefully crafted to cleanse without disrupting the natural moisture balance. Infused with Aloe Vera, Keratin, and Botanical Extracts, it deeply hydrates, softens, and enhances volume, leaving your hair healthy, shiny, and full of life. Suitable for all hair types, including dry, damaged, or colour-treated hair.",
     category: "shampoo",
     sku: "DP-HYD-SHM",
     tags: ["Aloe Vera Shampoo", "Damaged Hair Repair", "Deep Hydrating Shampoo", "Healthy Hair Shampoo", "Hydrating Hair Care", "Keratin Shampoo"],
     benefits: [
-      "Deeply hydrates and restores moisture with Glycerin, Sodium PCA, Niacinamide, Betaine.",
-      "Boosts volume and shine without weighing hair down.",
-      "Smooths frizz and leaves hair feeling soft and manageable.",
-      "Formula free from sulfates, silicones, and parabens."
+      "Deeply hydrates and restores moisture with Glycerin, Sodium PCA, Niacinamide, and Betaine.",
+      "Boosts volume and enhances shine without weighing the hair down.",
+      "Smooths frizz and leaves hair soft, silky, and manageable.",
+      "Formulated without SLS, SLSA, silicones, or parabens."
     ],
     usage: "Apply to wet hair, lather, and rinse thoroughly. For a richer lather, rub between palms before applying. Follow with Ecovluu Deep Conditioning Hair Mask for best results.",
     ingredients: "Aqua, Sodium Cocoyl Isethionate, Cocamidopropyl Betaine, Sodium Lauroamphoacetate, Sodium Hydroxymethylglycinate, Panthenol, Chamomilla Recutita (Chamomile) Flower Extract, Glycerin, Sodium Chloride, Citric Acid, Sodium PCA, Sodium Lactate, Cymbopogon Flexuosus Oil (Lemongrass), Pogostemon Cablin (Patchouli) Oil, Arginine, Aspartic Acid, PCA, Glycine, Alanine, Serine, Valine, Proline, Threonine, Isoleucine, Phenylalanine, Ricinus Communis (Castor) Seed Oil, Aloe Barbadensis Leaf Powder, Guar Hydroxypropyltrimonium Chloride, Glycine, Alanine, Serine, Valine, Proline, Threonine, Isoleucine, Sodium Phytate, Disodium, Alcohol, Aminopropanol, Histidine, Phenylalanine, Limonene, Geraniol, Citronellol, Citral, Limonene",

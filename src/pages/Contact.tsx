@@ -103,7 +103,7 @@ const Contact = () => {
     },
     {
       question: " Where are Ecovluu products made?",
-      answer: "All Ecovluu products are handmade in the European Union, in small batches, with care and precision. This artisanal approach ensures freshness, quality control, and a personal touch in every bottle."
+      answer: "All Ecovluu products are handmade in the Ireland, in small batches, with care and precision. This artisanal approach ensures freshness, quality control, and a personal touch in every bottle."
     },
     {
       question: " Do you offer samples or travel sizes?",
