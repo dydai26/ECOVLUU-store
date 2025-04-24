@@ -71,8 +71,8 @@ const StripePaymentForm = ({
       console.log("Payment method created:", paymentMethod);
       
       try {
-        const createTestPayment = await import('@/lib/stripe').then(module => module.createTestPayment);
-        const paymentResult = await createTestPayment(
+        const { createPayment } = await import('@/lib/stripe');
+        const paymentResult = await createPayment(
           paymentMethod.id,
           total,
           'eur',
@@ -127,7 +127,7 @@ const StripePaymentForm = ({
                   color: '#9e2146',
                 },
               },
-              hidePostalCode: true
+              hidePostalCode: true,
             }}
           />
         </div>
@@ -146,13 +146,7 @@ const StripePaymentForm = ({
         {processingPayment ? 'Processing...' : `Pay €${total.toFixed(2)}`}
       </Button>
       
-      <div className="mt-4 text-sm text-gray-600 bg-gray-50 p-3 rounded">
-        <p className="font-medium">Test Card Information:</p>
-        <p>Card number: 4242 4242 4242 4242</p>
-        <p>Expiry date: Any future date</p>
-        <p>CVC: Any 3 digits</p>
-        <p className="mt-2 text-xs text-gray-500">Note: This is a test mode payment that will appear in your Stripe dashboard.</p>
-      </div>
+     
     </form>
   );
 };

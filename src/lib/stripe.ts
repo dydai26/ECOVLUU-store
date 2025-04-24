@@ -1,50 +1,39 @@
 
 import { loadStripe } from "@stripe/stripe-js";
-import { STRIPE_PUBLISHABLE_KEY, STRIPE_SECRET_KEY } from "./constants";
+import { STRIPE_PUBLISHABLE_KEY } from "./constants";
+import { createClient } from '@supabase/supabase-js';
 import Stripe from "stripe";
 
 export const stripePromise = loadStripe(STRIPE_PUBLISHABLE_KEY);
 
-// Create a Stripe instance for server-side operations
-// Note: This is not the recommended approach for production
-// In production, this should be handled by a secure backend
-const stripeServer = new Stripe(STRIPE_SECRET_KEY, {
-  apiVersion: '2023-10-16' as Stripe.LatestApiVersion,
-});
+// Initialize Supabase client
+const supabase = createClient(
+  'https://inivoiunisrgdinrcquu.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImluaXZvaXVuaXNyZ2RpbnJjcXV1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQyNzY0OTgsImV4cCI6MjA1OTg1MjQ5OH0.Ruox-xcKxcirSSmTsNHpPIXqUyFCApZOisJViI_Hp1w'
+);
 
-/**
- * Creates a payment with Stripe in test mode.
- * This function will create an actual test payment that appears in Stripe dashboard.
- */
-export const createTestPayment = async (
+export const createPayment = async (
   paymentMethodId: string, 
   amount: number, 
   currency: string = 'eur',
   metadata: Record<string, string> = {}
 ) => {
   try {
-    console.log("Creating payment with Stripe...", { paymentMethodId, amount, currency });
+    console.log("Calling create-payment function...", { paymentMethodId, amount, currency });
     
-    // Create a PaymentIntent with the order amount and currency
-    const paymentIntent = await stripeServer.paymentIntents.create({
-      amount: Math.round(amount * 100), // Stripe expects amount in cents
-      currency,
-      payment_method: paymentMethodId,
-      metadata,
-      confirm: true, // Confirm the payment immediately
-      description: "Test payment from EcoVoula shop",
-      return_url: window.location.origin + "/order-success",
+    const { data, error } = await supabase.functions.invoke('create-payment', {
+      body: {
+        paymentMethodId,
+        amount,
+        currency,
+        metadata,
+      }
     });
+
+    if (error) throw error;
+    console.log("Payment created:", data);
     
-    console.log("Payment intent created:", paymentIntent);
-    
-    return {
-      id: paymentIntent.id,
-      status: paymentIntent.status,
-      amount: amount,
-      currency: currency,
-      metadata
-    };
+    return data;
   } catch (error) {
     console.error("Error creating payment:", error);
     throw error;

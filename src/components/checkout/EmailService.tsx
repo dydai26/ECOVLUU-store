@@ -3,7 +3,7 @@ import { OrderData } from '@/components/checkout/types';
 
 export const sendOrderConfirmationEmail = async (orderData: OrderData) => {
   try {
-    emailjs.init("a779AWRXZ-BFm5EfZ");
+    emailjs.init("5Oigz1bCaEn2zPhRC");
     
     const itemsList = orderData.items.map((item: any) => 
       `${item.product.name} x ${item.quantity} - €${(item.product.price * item.quantity).toFixed(2)}`
@@ -11,8 +11,8 @@ export const sendOrderConfirmationEmail = async (orderData: OrderData) => {
     
     const templateParams = {
       order_id: orderData.orderId,
-      to_email: "dydai26@gmail.com",
-      recipient: "dydai26@gmail.com", // Явно вказуємо отримувача
+      to_email: "ecovluu@gmail.com",
+      recipient: "ecovluu@gmail.com", // Явно вказуємо отримувача
       to_name: "Адміністратор",       // Ім'я адміністратора, який отримує листа
       customer_name: `${orderData.customer.firstName} ${orderData.customer.lastName}`,
       customer_email: orderData.customer.email,
@@ -25,14 +25,14 @@ export const sendOrderConfirmationEmail = async (orderData: OrderData) => {
       total: `€${orderData.total.toFixed(2)}`,
       payment_method: orderData.paymentInfo ? "Credit Card (Stripe)" : "N/A",
       shipping_method: orderData.shipping?.name || "Standard Shipping",
-      email: "dydai26@gmail.com" // Додаємо явний email параметр, який EmailJS може вимагати
+      email: "ecovluu@gmail.com" // Додаємо явний email параметр, який EmailJS може вимагати
     };
     
     console.log("Sending order confirmation email with params:", templateParams);
     
     const result = await emailjs.send(
-      "service_xzm5uka", // Використовуємо сервіс ID як вказано користувачем
-      "template_gofuiw7", 
+      "service_3301k2m", // Використовуємо сервіс ID як вказано користувачем
+      "template_gs9l77e", 
       templateParams
     );
     

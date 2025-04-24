@@ -14,5 +14,12 @@
         "typescript": "typescript",
         "typescriptreact": "typescriptreact"
     },
-    "tailwindCSS.emmetCompletions": true
+    "tailwindCSS.emmetCompletions": true,
+    "deno.enable": true,
+    "deno.enablePaths": ["supabase/functions"],
+    "deno.unstable": true,
+    "deno.importMap": "./import_map.json",
+    "[typescript]": {
+        "editor.defaultFormatter": "denoland.vscode-deno"
+    }
 }

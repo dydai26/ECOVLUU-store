@@ -97,7 +97,7 @@ const Navbar = () => {
                     onClick={toggleSearch}
                     className="ml-2 text-gray-700 hover:text-red-500 transition-colors"
                   >
-                    <X size={20} />
+                    <span>Close</span>
                   </button>
                 </form>
               ) : (
@@ -111,9 +111,9 @@ const Navbar = () => {
             </div>
             
             {/* Account link - visible only on medium and larger screens */}
-            <Link to="/account" className="hidden md:block text-gray-700 hover:text-brand-brown transition-colors">
+            {/* <Link to="/account" className="hidden md:block text-gray-700 hover:text-brand-brown transition-colors">
               <User size={20} />
-            </Link>
+            </Link> */}
             
             {/* Cart link - visible on all screen sizes */}
             <Link to="/cart" className="text-gray-700 hover:text-brand-brown transition-colors relative">
@@ -137,7 +137,7 @@ const Navbar = () => {
                   <div className="bg-brand-brown text-white h-full flex flex-col">
                     <div className="p-4 flex justify-end">
                       <SheetTrigger asChild>
-                        <button className="text-white hover:text-gray-200">
+                      <button className="text-white hover:text-gray-200">
                           <X size={24} />
                         </button>
                       </SheetTrigger>
@@ -175,13 +175,13 @@ const Navbar = () => {
                       ))}
                       
                       {/* Added account link to mobile menu */}
-                      <Link 
+                      {/* <Link 
                         to="/account" 
                         className="py-3 px-6 hover:bg-brand-brown/80 transition-colors text-center flex items-center justify-center gap-2"
                       >
                         <User size={18} />
                         <span>ACCOUNT</span>
-                      </Link>
+                      </Link> */}
                     </div>
                   </div>
                 </SheetContent>

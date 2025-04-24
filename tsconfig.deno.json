@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "lib": ["deno.ns", "deno.unstable", "dom"],
+    "types": ["@types/node"],
+    "paths": {
+      "http/server": ["./node_modules/@types/deno_http_server/index.d.ts"],
+      "stripe": ["./node_modules/@types/stripe/index.d.ts"],
+      "supabase": ["./node_modules/@types/supabase/index.d.ts"]
+    }
+  },
+  "include": ["supabase/functions/**/*.ts"],
+  "exclude": ["node_modules"]
+} 

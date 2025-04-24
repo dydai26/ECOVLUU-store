@@ -110,6 +110,16 @@ const ShippingStep = ({
             <option value="Spain">Spain</option>
             <option value="Italy">Italy</option>
             <option value="Netherlands">Netherlands</option>
+            <option value="Belgium">Belgium</option>
+            <option value="Portugal">Portugal</option>
+            <option value="Switzerland">Switzerland</option>
+            <option value="Austria">Austria</option>
+            <option value="Poland">Poland</option>
+            <option value="Sweden">Sweden</option>
+            <option value="Denmark">Denmark</option>
+            <option value="Norway">Norway</option>
+            <option value="Finland">Finland</option>
+            <option value="Greece">Greece</option>
           </select>
         </div>
         
