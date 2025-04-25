@@ -166,7 +166,7 @@ const AboutPage = () => {
       <section className="py-16 bg-[#FAF5F0]" data-animate>
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <h2 className="text-center text-2xl font-medium text-[#5A4A41] mb-12 uppercase tracking-wide" data-animate>
-            Our Key Ingredients
+          Trusted Ingredients. Proven Results.
           </h2>
           
           <div className="relative" data-animate>
@@ -332,7 +332,7 @@ const AboutPage = () => {
         </p>
         <div data-animate>
           <a 
-            href="https://wa.me/yourphonenumber" 
+            href="https://api.whatsapp.com/send/?phone=353871155291&text&type=phone_number&app_absent=0" 
             className="inline-flex items-center gap-2 bg-[#5A4A41] text-white px-8 py-4 rounded-lg text-lg hover:bg-[#4A3A31] transition-colors"
           >
             <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">

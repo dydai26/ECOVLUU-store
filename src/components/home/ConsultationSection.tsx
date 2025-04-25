@@ -40,7 +40,7 @@ const ConsultationSection = () => {
         Get free consultation with hair specialist with 25 years of experience in hair industry
       </p>
       <a 
-        href="https://wa.me/yourphonenumber" 
+        href="https://api.whatsapp.com/send/?phone=353871155291&text&type=phone_number&app_absent=0" 
         className="inline-flex items-center gap-2 bg-[#5A4A41] text-white px-8 py-4 rounded-lg text-lg hover:bg-[#4A3A31] transition-colors"
       >
         <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
