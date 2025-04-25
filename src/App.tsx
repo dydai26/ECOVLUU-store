@@ -20,6 +20,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { CartProvider } from "@/context/CartContext";
 import { OrderProvider } from "@/context/OrderContext";
 import { ReviewsProvider } from "@/context/ReviewsContext";
+import { initializeProtection } from '@/lib/protection';
 
 // Create a client
 import IntroAnimation from "@/components/intro/IntroAnimation";
@@ -42,6 +43,8 @@ const App = () => {
       // Set flag in session storage
       sessionStorage.setItem('hasSeenIntro', 'true');
     }
+
+    initializeProtection();
   }, []);
 
   const handleAnimationComplete = () => {
