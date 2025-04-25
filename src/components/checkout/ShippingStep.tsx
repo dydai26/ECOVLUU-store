@@ -104,7 +104,7 @@ const ShippingStep = ({
           >
             <option value="">Select a country</option>
             <option value="Ireland">Ireland</option>
-            <option value="United Kingdom">United Kingdom</option>
+            <option value="Romania">Romania</option>
             <option value="France">France</option>
             <option value="Germany">Germany</option>
             <option value="Spain">Spain</option>

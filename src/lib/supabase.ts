@@ -1,4 +1,3 @@
-
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = 'https://inivoiunisrgdinrcquu.supabase.co';
@@ -193,20 +192,20 @@ const HARDCODED_UPS_RATES: Record<string, UPSShippingRate[]> = {
       deliveryTimeEstimate: "Next business day"
     }
   ],
-  "GB": [
+  "RO": [
     {
-      serviceCode: "GB_standard",
-      serviceName: "UPS Standard (UK)",
-      totalPrice: 25.99,
-      currency: "EUR",
-      deliveryTimeEstimate: "2-3 business days"
+      "serviceCode": "RO_standard",
+      "serviceName": "UPS Standard (IE → RO)",
+      "totalPrice": 10.19,
+      "currency": "EUR",
+      "deliveryTimeEstimate": "3–5 business days"
     },
     {
-      serviceCode: "GB_express",
-      serviceName: "UPS Express (UK)",
-      totalPrice: 70.99,
-      currency: "EUR",
-      deliveryTimeEstimate: "1-2 business days"
+      "serviceCode": "RO_express",
+      "serviceName": "UPS Express (IE → RO)",
+      "totalPrice": 22.29,
+      "currency": "EUR",
+      "deliveryTimeEstimate": "1–2 business days"
     }
   ],
   "FR": [
@@ -490,6 +489,7 @@ export const getUPSShippingRates = async (
 const getCountryCode = (country: string): string => {
   const countryCodes: {[key: string]: string} = {
     'Ireland': 'IE',
+    'Romania': 'RO',
     'United Kingdom': 'GB',
     'France': 'FR',
     'Germany': 'DE',
