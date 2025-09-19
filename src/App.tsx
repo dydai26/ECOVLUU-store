@@ -12,6 +12,8 @@ import Cart from '@/pages/Cart';
 import Checkout from '@/pages/Checkout';
 import OrderSuccess from '@/pages/OrderSuccess';
 import Reviews from "@/pages/Reviews";
+import Login from '@/pages/Login';
+import AdminDashboard from '@/pages/AdminDashboard';
 import NotFound from "@/pages/NotFound";
 import TermsAndConditions from "@/pages/TermsAndConditions";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
@@ -20,7 +22,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { CartProvider } from "@/context/CartContext";
 import { OrderProvider } from "@/context/OrderContext";
 import { ReviewsProvider } from "@/context/ReviewsContext";
-import { initializeProtection } from '@/lib/protection';
+import { AdminProvider } from "@/context/AdminContext";
 
 // Create a client
 import IntroAnimation from "@/components/intro/IntroAnimation";
@@ -43,8 +45,6 @@ const App = () => {
       // Set flag in session storage
       sessionStorage.setItem('hasSeenIntro', 'true');
     }
-
-    initializeProtection();
   }, []);
 
   const handleAnimationComplete = () => {
@@ -59,9 +59,10 @@ const App = () => {
       <div className={`transition-opacity duration-500 ${contentLoaded ? 'opacity-100' : 'opacity-0'}`}>
         <Router>
           <QueryClientProvider client={queryClient}>
-            <CartProvider>
-              <OrderProvider>
-                <ReviewsProvider>
+            <AdminProvider>
+              <CartProvider>
+                <OrderProvider>
+                  <ReviewsProvider>
                   <Routes>
                     <Route path="/" element={<Index />} />
                     <Route path="/about" element={<About />} />
@@ -70,17 +71,20 @@ const App = () => {
                     <Route path="/product/:id" element={<ProductDetail />} />
                     <Route path="/cart" element={<Cart />} />
                     <Route path="/checkout" element={<Checkout />} />
-                    <Route path="/order-success" element={<OrderSuccess />} />
-                    <Route path="/reviews" element={<Reviews />} />
-                    <Route path="/terms" element={<TermsAndConditions />} />
-                    <Route path="/privacy" element={<PrivacyPolicy />} />
-                    <Route path="/returns" element={<ReturnsAndRefundPolicy />} />
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
+                  <Route path="/order-success" element={<OrderSuccess />} />
+                  <Route path="/reviews" element={<Reviews />} />
+                  <Route path="/terms" element={<TermsAndConditions />} />
+                  <Route path="/privacy" element={<PrivacyPolicy />} />
+                  <Route path="/returns" element={<ReturnsAndRefundPolicy />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/admin" element={<AdminDashboard />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
                   <Toaster />
-                </ReviewsProvider>
-              </OrderProvider>
-            </CartProvider>
+                  </ReviewsProvider>
+                </OrderProvider>
+              </CartProvider>
+            </AdminProvider>
           </QueryClientProvider>
         </Router>
       </div>

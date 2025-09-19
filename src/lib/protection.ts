@@ -2,12 +2,12 @@
 export const preventTextCopy = () => {
   document.addEventListener('copy', (e) => {
     e.preventDefault();
-    alert('Копіювання тексту заборонено');
+    alert('Copying text is prohibited.');
   });
 
   document.addEventListener('cut', (e) => {
     e.preventDefault();
-    alert('Вирізання тексту заборонено');
+    alert('Text clipping is prohibited.');
   });
 };
 

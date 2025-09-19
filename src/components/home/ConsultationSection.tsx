@@ -49,7 +49,7 @@ const ConsultationSection = () => {
         Contact us now!
       </a>
     </section>
-  );
+  ); 
 };
 
 export default ConsultationSection;

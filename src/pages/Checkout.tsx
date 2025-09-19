@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
@@ -8,7 +9,7 @@ import { toast } from "@/hooks/use-toast";
 import { ArrowLeft } from "lucide-react";
 import { validateUPSAddress, getUPSShippingRates, UPSAddress, UPSShippingRate } from "@/lib/supabase";
 
-// Import our new components
+// Import our components
 import CheckoutStepper from "@/components/checkout/CheckoutSteppers";
 import PersonalInfoStep from "@/components/checkout/PersonalInfoStep";
 import ShippingStep from "@/components/checkout/ShippingStep";
@@ -18,7 +19,7 @@ import { CheckoutFormData } from "@/components/checkout/types";
 import { sendOrderConfirmationEmail } from "@/components/checkout/EmailService";
 
 const Checkout = () => {
-  const { cartItems, getCartTotal, clearCart } = useCart();
+  const { cartItems, getCartTotal, clearCart, promoCode, getDiscountAmount, getDiscountedTotal } = useCart();
   const { setOrderData } = useOrder();
   const navigate = useNavigate();
   
@@ -42,12 +43,31 @@ const Checkout = () => {
   const [selectedShippingRate, setSelectedShippingRate] = useState<UPSShippingRate | null>(null);
   const [processingPayment, setProcessingPayment] = useState(false);
   
+  // Default fallback shipping rates in case API fails
+  const fallbackShippingRates: UPSShippingRate[] = [
+    {
+      serviceCode: "fallback_standard",
+      serviceName: "Standard Delivery",
+      totalPrice: 5.99,
+      currency: "EUR",
+      deliveryTimeEstimate: "3-5 business days"
+    },
+    {
+      serviceCode: "fallback_express",
+      serviceName: "Express Delivery",
+      totalPrice: 12.99,
+      currency: "EUR",
+      deliveryTimeEstimate: "1-2 business days"
+    }
+  ];
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
     
     if (name === "shippingMethod") {
-      const selected = shippingRates.find(rate => rate.serviceCode === value);
+      const selected = shippingRates.find(rate => rate.serviceCode === value) || 
+                       fallbackShippingRates.find(rate => rate.serviceCode === value);
       if (selected) {
         setSelectedShippingRate(selected);
       }
@@ -60,8 +80,11 @@ const Checkout = () => {
     
     try {
       const subtotal = getCartTotal();
-      const shipping = selectedShippingRate ? selectedShippingRate.totalPrice : (subtotal > 0 ? 8.93 : 0);
-      const total = subtotal + shipping;
+      const discountAmount = getDiscountAmount();
+      const discountedSubtotal = getDiscountedTotal();
+      const shipping = selectedShippingRate ? selectedShippingRate.totalPrice : (subtotal > 0 ? 5.99 : 0);
+      const tax = discountedSubtotal * 0.21;
+      const total = discountedSubtotal + shipping + tax;
       
       const orderData = {
         orderId,
@@ -79,8 +102,10 @@ const Checkout = () => {
         shipping: selectedShippingRate ? {
           name: selectedShippingRate.serviceName,
           price: selectedShippingRate.totalPrice
-        } : { name: "Standard Shipping", price: 8.93 },
+        } : { name: "Standard Shipping", price: 5.99 },
         subtotal: subtotal,
+        discount: promoCode ? { code: promoCode.code, amount: discountAmount } : null,
+        tax: tax,
         total: total,
         date: new Date().toISOString(),
         paymentInfo: paymentInfo
@@ -120,7 +145,7 @@ const Checkout = () => {
     if (!address || !city || !postalCode || !country) {
       toast({
         title: "Address Validation Error",
-        description: "Please fill in all address fields before validating.",
+        description: "Please fill in all address fields before calculating shipping rates.",
         variant: "destructive"
       });
       return;
@@ -129,6 +154,8 @@ const Checkout = () => {
     setIsValidatingAddress(true);
     
     try {
+      console.log("Validating address with UPS:", { address, city, postalCode, country });
+      
       const upsAddress: UPSAddress = {
         addressLine: address,
         city: city,
@@ -136,7 +163,21 @@ const Checkout = () => {
         countryCode: country,
       };
       
-      const validatedAddresses = await validateUPSAddress(upsAddress);
+      // Try to validate address but handle failures gracefully
+      let validatedAddresses: UPSAddress[] = [];
+      try {
+        validatedAddresses = await validateUPSAddress(upsAddress);
+        console.log("Validated addresses:", validatedAddresses);
+      } catch (error) {
+        console.error("Address validation failed:", error);
+        // Use original address if validation fails
+        validatedAddresses = [upsAddress];
+        
+        toast({
+          title: "Address Validation Notice",
+          description: "We couldn't validate your address with UPS. Using address as entered.",
+        });
+      }
       
       if (validatedAddresses.length > 0) {
         const validAddress = validatedAddresses[0];
@@ -149,24 +190,45 @@ const Checkout = () => {
         }));
         
         toast({
-          title: "Address Validated",
-          description: "Your shipping address has been validated by UPS.",
+          title: "Address Processed",
+          description: "Calculating shipping rates...",
         });
         
-        fetchShippingRates(validAddress);
+        // Try to fetch shipping rates with fallback
+        await fetchShippingRates(validAddress);
       } else {
+        // If no addresses were returned, show a fallback message and use fallback rates
         toast({
           title: "Address Not Found",
-          description: "UPS could not validate this address. Please check your input.",
+          description: "We couldn't find your address. Please check your input or try a different address.",
           variant: "destructive"
         });
+        setShippingRates(fallbackShippingRates);
+        
+        if (!formData.shippingMethod) {
+          setFormData(prev => ({
+            ...prev,
+            shippingMethod: fallbackShippingRates[0].serviceCode
+          }));
+          setSelectedShippingRate(fallbackShippingRates[0]);
+        }
       }
     } catch (error) {
-      console.error("Error validating address:", error);
+      console.error("Error in address validation flow:", error);
+      // Use fallback shipping rates
+      setShippingRates(fallbackShippingRates);
+      
+      if (!formData.shippingMethod) {
+        setFormData(prev => ({
+          ...prev,
+          shippingMethod: fallbackShippingRates[0].serviceCode
+        }));
+        setSelectedShippingRate(fallbackShippingRates[0]);
+      }
+      
       toast({
-        title: "Address Validation Error",
-        description: "There was an error validating your address with UPS.",
-        variant: "destructive"
+        title: "Shipping Calculation",
+        description: "We're using estimated shipping rates for your address.",
       });
     } finally {
       setIsValidatingAddress(false);
@@ -177,6 +239,8 @@ const Checkout = () => {
     setIsLoadingRates(true);
     
     try {
+      console.log("Fetching shipping rates to:", toAddress);
+      
       const fromAddress: UPSAddress = {
         addressLine: "123 Store St",
         city: "Dublin",
@@ -184,24 +248,61 @@ const Checkout = () => {
         countryCode: "Ireland"
       };
       
-      const totalWeight = cartItems.reduce((sum, item) => sum + (item.quantity * 0.5), 0);
+      // Calculate package weight based on items in cart
+      // Assuming each item weighs 0.5 kg as a default
+      const totalWeight = Math.max(0.1, cartItems.reduce((sum, item) => sum + (item.quantity * 0.5), 0));
       
-      const rates = await getUPSShippingRates(fromAddress, toAddress, totalWeight);
+      console.log("Calculated package weight:", totalWeight, "kg");
       
-      setShippingRates(rates);
-      if (rates.length > 0) {
+      let rates: UPSShippingRate[] = [];
+      try {
+        rates = await getUPSShippingRates(fromAddress, toAddress, totalWeight);
+        console.log("Received shipping rates:", rates);
+      } catch (error) {
+        console.error("Error fetching shipping rates:", error);
+        // Use fallback rates if API call fails
+        rates = fallbackShippingRates;
+      }
+      
+      if (rates && rates.length > 0) {
+        setShippingRates(rates);
         setSelectedShippingRate(rates[0]);
         setFormData(prev => ({
           ...prev,
           shippingMethod: rates[0].serviceCode
         }));
+        
+        toast({
+          title: "Shipping Options Available",
+          description: `${rates.length} shipping options found for your address.`,
+        });
+      } else {
+        // If no rates were returned, use fallback rates
+        setShippingRates(fallbackShippingRates);
+        setSelectedShippingRate(fallbackShippingRates[0]);
+        setFormData(prev => ({
+          ...prev,
+          shippingMethod: fallbackShippingRates[0].serviceCode
+        }));
+        
+        toast({
+          title: "Shipping Estimate",
+          description: "We're showing estimated shipping rates for your destination.",
+        });
       }
     } catch (error) {
-      console.error("Error fetching shipping rates:", error);
+      console.error("Error in shipping rates flow:", error);
+      // Use fallback rates as a last resort
+      setShippingRates(fallbackShippingRates);
+      setSelectedShippingRate(fallbackShippingRates[0]);
+      setFormData(prev => ({
+        ...prev,
+        shippingMethod: fallbackShippingRates[0].serviceCode
+      }));
+      
       toast({
-        title: "Shipping Rates Error",
-        description: "Could not get UPS shipping rates.",
-        variant: "destructive"
+        title: "Shipping Information",
+        description: "Using standard shipping rates for your order.",
       });
     } finally {
       setIsLoadingRates(false);
@@ -231,6 +332,22 @@ const Checkout = () => {
         });
         return;
       }
+      
+      if (!formData.shippingMethod && shippingRates.length > 0) {
+        // If no shipping method is selected but rates are available, auto-select the first one
+        setFormData(prev => ({
+          ...prev,
+          shippingMethod: shippingRates[0].serviceCode
+        }));
+        setSelectedShippingRate(shippingRates[0]);
+      } else if (!formData.shippingMethod) {
+        // If no rates available, use fallback
+        setFormData(prev => ({
+          ...prev,
+          shippingMethod: fallbackShippingRates[0].serviceCode
+        }));
+        setSelectedShippingRate(fallbackShippingRates[0]);
+      }
     }
     
     setCurrentStep(prev => Math.min(prev + 1, 3));
@@ -241,8 +358,11 @@ const Checkout = () => {
   };
   
   const subtotal = getCartTotal();
-  const shipping = selectedShippingRate ? selectedShippingRate.totalPrice : (subtotal > 0 ? 8.93 : 0);
-  const total = subtotal + shipping;
+  const discountAmount = getDiscountAmount();
+  const discountedSubtotal = getDiscountedTotal();
+  const shipping = selectedShippingRate ? selectedShippingRate.totalPrice : (subtotal > 0 ? 5.99 : 0);
+  const tax = discountedSubtotal * 0.21;
+  const total = discountedSubtotal + shipping + tax;
   
   if (cartItems.length === 0) {
     navigate("/cart");
@@ -310,8 +430,10 @@ const Checkout = () => {
                 cartItems={cartItems}
                 subtotal={subtotal}
                 shipping={shipping}
+                tax={tax}
                 total={total}
                 selectedShippingRate={selectedShippingRate}
+                discount={promoCode ? { code: promoCode.code, amount: discountAmount } : null}
               />
             </div>
           </div>

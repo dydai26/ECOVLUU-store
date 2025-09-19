@@ -222,7 +222,7 @@ const ProductDetail = () => {
             
             {/* SKU and Category */}
             <div className="text-sm text-gray-600 mb-4">
-              <p><span className="font-medium">SKU:</span> {product.sku || `DP-HYD-${product.id}`}</p>
+              <p><span className="font-medium">SKU:</span> {product.sku || `DP-HYD-${product.name}`}</p>
               <p><span className="font-medium">Category:</span> {product.category} Products</p>
             </div>
             

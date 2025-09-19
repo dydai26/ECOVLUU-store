@@ -1,15 +1,28 @@
+
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
 import { useCart } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
-import { Trash2, Plus, Minus, ArrowRight, ShoppingBag } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Trash2, Plus, Minus, ArrowRight, ShoppingBag, Tag, ChevronDown, ChevronUp } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 const Cart = () => {
-  const { cartItems, removeFromCart, updateQuantity, getCartTotal, clearCart } = useCart();
+  const { 
+    cartItems, 
+    removeFromCart, 
+    updateQuantity, 
+    getCartTotal, 
+    clearCart, 
+    promoCode, 
+    getDiscountAmount, 
+    getDiscountedTotal, 
+    applyPromoCode 
+  } = useCart();
   const navigate = useNavigate();
-  const [couponCode, setCouponCode] = useState("");
+  const [promoInput, setPromoInput] = useState("");
+  const [showPromoInput, setShowPromoInput] = useState(false);
   
   const handleRemoveItem = (productId: number) => {
     removeFromCart(productId);
@@ -24,26 +37,41 @@ const Cart = () => {
     updateQuantity(productId, newQuantity);
   };
   
-  const handleApplyCoupon = (e: React.FormEvent) => {
+  const handleApplyPromo = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!couponCode.trim()) {
+    if (!promoInput.trim()) {
       toast({
         title: "Error",
-        description: "Please enter a coupon code.",
+        description: "Please enter a promo code.",
         variant: "destructive",
       });
       return;
     }
     
-    // In a real app, you would verify the coupon code with your backend
-    toast({
-      title: "Invalid coupon",
-      description: "The coupon code you entered is invalid or expired.",
-      variant: "destructive",
-    });
+    const result = applyPromoCode(promoInput);
     
-    setCouponCode("");
+    if (result === "success") {
+      toast({
+        title: "Promo code applied!",
+        description: "You saved 10% on your order.",
+      });
+      setShowPromoInput(false);
+    } else if (result === "already_applied") {
+      toast({
+        title: "Promo code already applied",
+        description: "You have already used this promo code.",
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Invalid promo code",
+        description: "The promo code you entered is invalid or expired.",
+        variant: "destructive",
+      });
+    }
+    
+    setPromoInput("");
   };
   
   const handleCheckout = () => {
@@ -61,8 +89,10 @@ const Cart = () => {
   };
   
   const subtotal = getCartTotal();
-  const shipping = subtotal > 0 ? 8.93 : 0;
-  const total = subtotal + shipping;
+  const discountAmount = getDiscountAmount();
+  const discountedSubtotal = getDiscountedTotal();
+  const shipping = subtotal > 0 ? 5.99 : 0;
+  const total = discountedSubtotal + shipping;
 
   return (
     <Layout>
@@ -89,8 +119,7 @@ const Cart = () => {
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               <div className="lg:col-span-2">
-                {/* Desktop view - Table layout (hidden on mobile) */}
-                <div className="bg-white rounded-lg shadow-sm overflow-hidden hidden md:block">
+                <div className="bg-white rounded-lg shadow-sm overflow-hidden">
                   <table className="w-full">
                     <thead className="bg-gray-50 border-b">
                       <tr>
@@ -161,71 +190,6 @@ const Cart = () => {
                   </table>
                 </div>
                 
-                {/* Mobile view - Card layout (visible only on small screens) */}
-                <div className="md:hidden space-y-4">
-                  {cartItems.map((item) => (
-                    <div key={item.product.id} className="bg-white rounded-lg shadow-sm p-4">
-                      <div className="flex items-start space-x-4">
-                        {/* Product image */}
-                        <img
-                          src={item.product.image}
-                          alt={item.product.name}
-                          className="w-20 h-20 object-cover rounded flex-shrink-0"
-                        />
-                        
-                        {/* Product info */}
-                        <div className="flex-1 min-w-0">
-                          <Link 
-                            to={`/product/${item.product.id}`}
-                            className="font-medium text-brand-brown hover:underline block truncate"
-                          >
-                            {item.product.name}
-                          </Link>
-                          
-                          <div className="mt-1 flex justify-between">
-                            <span className="text-gray-600">Price:</span>
-                            <span>€{item.product.price.toFixed(2)}</span>
-                          </div>
-                          
-                          <div className="mt-1 flex justify-between">
-                            <span className="text-gray-600">Subtotal:</span>
-                            <span className="font-medium">€{(item.product.price * item.quantity).toFixed(2)}</span>
-                          </div>
-                          
-                          {/* Quantity controls and remove button */}
-                          <div className="mt-3 flex items-center justify-between">
-                            <div className="flex items-center border border-gray-200 rounded">
-                              <button
-                                onClick={() => handleUpdateQuantity(item.product.id, item.quantity - 1)}
-                                className="px-2 py-1 hover:bg-gray-100"
-                                aria-label="Decrease quantity"
-                              >
-                                <Minus size={14} />
-                              </button>
-                              <span className="px-3 py-1 border-l border-r border-gray-200">{item.quantity}</span>
-                              <button
-                                onClick={() => handleUpdateQuantity(item.product.id, item.quantity + 1)}
-                                className="px-2 py-1 hover:bg-gray-100"
-                                aria-label="Increase quantity"
-                              >
-                                <Plus size={14} />
-                              </button>
-                            </div>
-                            
-                            <button
-                              onClick={() => handleRemoveItem(item.product.id)}
-                              className="text-gray-500 hover:text-red-500 p-1"
-                              aria-label="Remove item"
-                            >
-                              <Trash2 size={18} />
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                
                 <div className="flex justify-between items-center mt-6">
                   <Link 
                     to="/shop"
@@ -254,6 +218,12 @@ const Cart = () => {
                       <span className="text-gray-600">Subtotal</span>
                       <span>€{subtotal.toFixed(2)}</span>
                     </div>
+                    {promoCode && (
+                      <div className="flex justify-between text-red-600">
+                        <span>Discount ({promoCode.code})</span>
+                        <span>-€{discountAmount.toFixed(2)}</span>
+                      </div>
+                    )}
                     <div className="flex justify-between">
                       <span className="text-gray-600">Shipping</span>
                       <span>€{shipping.toFixed(2)}</span>
@@ -264,6 +234,45 @@ const Cart = () => {
                     </div>
                   </div>
                   
+                  {/* Promo Code Section */}
+                  <div className="mb-4">
+                    <button
+                      onClick={() => setShowPromoInput(!showPromoInput)}
+                      className="flex items-center justify-between w-full text-left text-brand-brown hover:text-brand-brown/80 transition-colors"
+                    >
+                      <div className="flex items-center">
+                        <Tag className="h-4 w-4 mr-2" />
+                        <span>Enter a promo code</span>
+                      </div>
+                      {showPromoInput ? (
+                        <ChevronUp className="h-4 w-4" />
+                      ) : (
+                        <ChevronDown className="h-4 w-4" />
+                      )}
+                    </button>
+                    
+                    {showPromoInput && (
+                      <form onSubmit={handleApplyPromo} className="mt-3">
+                        <div className="flex gap-2">
+                          <Input
+                            type="text"
+                            placeholder="enter promo code"
+                            value={promoInput}
+                            onChange={(e) => setPromoInput(e.target.value)}
+                            className="flex-1"
+                          />
+                          <Button
+                            type="submit"
+                            variant="outline"
+                            className="px-6"
+                          >
+                            Apply
+                          </Button>
+                        </div>
+                      </form>
+                    )}
+                  </div>
+                  
                   <Button
                     onClick={handleCheckout}
                     className="w-full bg-brand-orange hover:bg-brand-orange/90 text-white"
@@ -271,8 +280,11 @@ const Cart = () => {
                     Proceed to Checkout
                   </Button>
                 </div>
+                
+               
+                </div>
               </div>
-            </div>
+           
           )}
         </div>
       </div>
